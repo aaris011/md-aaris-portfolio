@@ -91,13 +91,20 @@ function Contact() {
       toast.success("Message sent", {
         description: "Thanks for reaching out — I'll get back to you soon.",
       });
-    } catch (error) {
-      console.error("EmailJS submission failed:", error);
+   } catch (error) {
+  console.error("EmailJS submission failed:", error);
 
-      toast.error("Message not sent", {
-        description: "Please try again or email me directly.",
-      });
-    } finally {
+  const details =
+    typeof error === "object" && error !== null && "text" in error
+      ? String(error.text)
+      : error instanceof Error
+        ? error.message
+        : String(error);
+
+  toast.error("Message not sent", {
+    description: details,
+  });
+}finally {
       setSending(false);
     }
   };
